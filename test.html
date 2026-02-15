@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Align-items vs Align-content</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <h1>Align-items vs Align-content</h1>
+    
+    <div class="demo-section">
+        <h2>1. align-items: center (одна строка)</h2>
+        <div class="container container-1">
+            <div class="item">1</div>
+            <div class="item">2</div>
+            <div class="item">3</div>
+            <div class="item">4</div>
+            <div class="item">5</div>
+            <div class="item">6</div>
+        </div>
+        <p class="note">Каждый элемент выровнен по центру своей строки</p>
+    </div>
+
+    <div class="demo-section">
+        <h2>2. align-content: center (несколько строк)</h2>
+        <div class="container container-2">
+            <div class="item">1</div>
+            <div class="item">2</div>
+            <div class="item">3</div>
+            <div class="item">4</div>
+            <div class="item">5</div>
+            <div class="item">6</div>
+        </div>
+        <p class="note">Все строки вместе выровнены по центру контейнера</p>
+    </div>
+
+    <div class="demo-section">
+        <h2>3. Сравнение (flex-direction: column)</h2>
+        <div class="row">
+            <div class="col">
+                <h3>align-items: center</h3>
+                <div class="container container-3 column">
+                    <div class="item">1</div>
+                    <div class="item">2</div>
+                    <div class="item">3</div>
+                    <div class="item">4</div>
+                    <div class="item">5</div>
+                    <div class="item">6</div>
+                </div>
+                <p>По горизонтали</p>
+            </div>
+            <div class="col">
+                <h3>align-content: center</h3>
+                <div class="container container-4 column wrap">
+                    <div class="item">1</div>
+                    <div class="item">2</div>
+                    <div class="item">3</div>
+                    <div class="item">4</div>
+                    <div class="item">5</div>
+                    <div class="item">6</div>
+                </div>
+                <p>Колонки по центру (нужен wrap)</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
