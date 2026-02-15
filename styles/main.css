@@ -126,9 +126,19 @@ h1 {
 	position: relative;
 }
 
+/* .progress__cover-bar {
+	position: absolute;
+	transition: all 1s;
+	width: 50%;
+	height: 5px;
+	border-radius: 4px;
+	background: #5051F9;
+} */
+
 .progress__cover-bar {
 	position: absolute;
-	width: 50%;
+	transition: all 1s;
+	width: var(--progress-width, 0%); /* 0% - значение по умолчанию */
 	height: 5px;
 	border-radius: 4px;
 	background: #5051F9;
