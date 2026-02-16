@@ -1,3 +1,136 @@
+// "use strict";
+
+// let habbits = [];
+// const HABBIT_KEY = "HABBIT_KEY";
+
+// /* page */
+// const page = {
+//   menu: document.querySelector(".menu__list"),
+//   header: {
+//     h1: document.querySelector(".h1"),
+//     progressPercent: document.querySelector(".progress__percent"),
+//     progressCoverBar: document.querySelector(".progress__cover-bar"),
+//   },
+//   main: document.querySelector("main"),
+// };
+
+// /* utils */
+// function loadData() {
+//   const habbitsString = localStorage.getItem(HABBIT_KEY);
+//   const habbitArray = JSON.parse(habbitsString);
+//   if (Array.isArray(habbitArray)) {
+//     habbits = habbitArray;
+//   }
+// }
+
+// function saveData() {
+//   localStorage.setItem(HABBIT_KEY, JSON.stringify(habbits));
+// }
+
+// /* render */
+// function rerenderMenu(activeHabbit) {
+//   if (!activeHabbit) {
+//     return;
+//   }
+//   for (const habbit of habbits) {
+//     const existed = document.querySelector(`[menu-habbit-id="${habbit.id}"]`);
+//     if (!existed) {
+//       const element = document.createElement("button");
+//       element.setAttribute("menu-habbit-id", habbit.id);
+//       element.classList.add("menu__item");
+//       element.addEventListener("click", () => rerender(habbit.id));
+//       element.innerHTML = `<img src="./images/${habbit.icon}.svg" alt="${habbit.name}" />`;
+//       if (activeHabbit.id === habbit.id) {
+//         element.classList.add("menu__item_active");
+//       }
+//       page.menu.appendChild(element);
+//       continue;
+//     }
+//     if (activeHabbit.id === habbit.id) {
+//       existed.classList.add("menu__item_active");
+//     } else {
+//       existed.classList.remove("menu__item_active");
+//     }
+//   }
+// }
+
+// function rerenderHead(activeHabbit) {
+//   if (!activeHabbit) {
+//     return;
+//   }
+//   page.header.h1.innerText = activeHabbit.name;
+//   const progress =
+//     activeHabbit.days.length / activeHabbit.target > 1
+//       ? 100
+//       : (activeHabbit.days.length / activeHabbit.target) * 100;
+//   page.header.progressPercent.innerText = progress.toFixed(0) + "%";
+//   page.header.progressCoverBar.style.setProperty(
+//     "--progress-width",
+//     `${progress}%`,
+//   );
+// }
+
+// function rerenderMain(activeHabbit) {
+//   //   page.main.innerHTML = "";
+//   while (page.main.firstChild) {
+//     page.main.removeChild(page.main.firstChild);
+//   }
+//   if (activeHabbit.days) {
+//     for (const [index, comment] of activeHabbit.days.entries()) {
+//       const dayNumber = index + 1;
+//       const day = `День ${dayNumber}`;
+//       const el = document.createElement("div");
+//       const habbitEl = document.createElement("div");
+//       habbitEl.classList.add("habbit");
+//       const habbitDay = document.createElement("div");
+//       habbitDay.classList.add("habbit__day");
+//       habbitDay.innerText = day;
+//       habbitEl.appendChild(habbitDay);
+//       const habbitComment = document.createElement("div");
+//       habbitComment.classList.add("habbit__comment");
+//       habbitComment.innerText = comment.comment;
+//       habbitEl.appendChild(habbitComment);
+//       const deleteButton = document.createElement("button");
+//       deleteButton.classList.add("habbit__delete");
+//       deleteButton.innerHTML = `<img src="./images/delete.svg" alt="Удалить день 1" />`;
+//       habbitEl.appendChild(deleteButton);
+//       el.appendChild(habbitEl);
+//       page.main.appendChild(el);
+//     }
+//     const el = document.createElement("div");
+//     const habbitEl = document.createElement("div");
+//     habbitEl.classList.add("habbit");
+//     const habbitDay = document.createElement("div");
+//     habbitDay.classList.add("habbit__day");
+//     habbitDay.innerText = `День ${activeHabbit.days.length + 1}`;
+//     habbitEl.appendChild(habbitDay);
+//     const habbitForm = document.createElement("form");
+//     habbitForm.classList.add("habbit__form");
+//     habbitForm.innerHTML = `
+//                     <input class="input_icon" type="text" placeholder="Комментарий" />
+//                     <img class="input__icon" src="./images/comment.svg" alt="Иконка комментария"/>
+//                     <button class="button">Готово</button>
+//                 `;
+//     habbitEl.appendChild(habbitForm);
+//     el.appendChild(habbitEl);
+//     page.main.appendChild(el);
+//   }
+// }
+
+// function rerender(activeHabbitId) {
+//   const activeHabbit = habbits.find((habbit) => habbit.id === activeHabbitId);
+//   rerenderMenu(activeHabbit);
+//   rerenderHead(activeHabbit);
+//   rerenderMain(activeHabbit);
+// }
+
+// /* init */
+// (() => {
+//   loadData();
+//   rerender(habbits[0].id);
+// })();
+
+
 'use strict';
 
 let habbits = [];
@@ -10,6 +143,10 @@ const page = {
 		h1: document.querySelector('.h1'),
 		progressPercent: document.querySelector('.progress__percent'),
 		progressCoverBar: document.querySelector('.progress__cover-bar'),
+	},
+	content: {
+		daysContainer: document.getElementById('days'),
+		nextDay: document.querySelector('.habbit__day')
 	}
 }
 
@@ -28,9 +165,6 @@ function saveData() {
 
 /* render */
 function rerenderMenu(activeHabbit) {
-	if (!activeHabbit) {
-		return;
-	}
 	for (const habbit of habbits) {
 		const existed = document.querySelector(`[menu-habbit-id="${habbit.id}"]`);
 		if (!existed) {
@@ -54,23 +188,37 @@ function rerenderMenu(activeHabbit) {
 }
 
 function rerenderHead(activeHabbit) {
-	if (!activeHabbit) {
-		return;
-	}
 	page.header.h1.innerText = activeHabbit.name;
 	const progress = activeHabbit.days.length / activeHabbit.target > 1
 		? 100
 		: activeHabbit.days.length / activeHabbit.target * 100;
 	page.header.progressPercent.innerText = progress.toFixed(0) + '%';
-	// page.header.progressCoverBar.setAttribute('style', `width: ${progress}%`); // задать как инлайн стиль, а инлайн стиль имеет высший приоритет
-	// page.header.progressCoverBar.style.width = `${progress}%`; // поменять css свойство у .progress__cover-bar
-	page.header.progressCoverBar.style.setProperty('--progress-width', `${progress}%`); // установить значение для кастомноо свойства
+	page.header.progressCoverBar.setAttribute('style', `width: ${progress}%`);
+}
+
+function rerenderContent(activeHabbit) {
+	page.content.daysContainer.innerHTML = '';
+	for (const index in activeHabbit.days) {
+		const element = document.createElement('div');
+		element.classList.add('habbit');
+		element.innerHTML = `<div class="habbit__day">День ${Number(index) + 1}</div>
+              <div class="habbit__comment">${activeHabbit.days[index].comment}</div>
+              <button class="habbit__delete">
+                <img src="./images/delete.svg" alt="Удалить день ${index + 1}" />
+              </button>`;
+		page.content.daysContainer.appendChild(element);
+	}
+	page.content.nextDay.innerHTML = `День ${activeHabbit.days.length + 1}`;
 }
 
 function rerender(activeHabbitId) {
 	const activeHabbit = habbits.find(habbit => habbit.id === activeHabbitId);
+	if (!activeHabbit) {
+		return;
+	}
 	rerenderMenu(activeHabbit);
 	rerenderHead(activeHabbit);
+	rerenderContent(activeHabbit);
 }
 
 /* init */
