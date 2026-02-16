@@ -2,6 +2,7 @@
 
 let habbits = [];
 const HABBIT_KEY = 'HABBIT_KEY';
+let globalActiveHabbitId;
 
 /* page */
 const page = {
@@ -78,8 +79,13 @@ function rerenderContent(activeHabbit) {
 	page.content.nextDay.innerHTML = `День ${activeHabbit.days.length + 1}`;
 }
 
+function getActiveHabbit(activeHabbitId) {
+	return habbits.find(habbit => habbit.id === activeHabbitId);
+}
+
 function rerender(activeHabbitId) {
-	const activeHabbit = habbits.find(habbit => habbit.id === activeHabbitId);
+	globalActiveHabbitId = activeHabbitId;
+	const activeHabbit = getActiveHabbit(activeHabbitId)
 	if (!activeHabbit) {
 		return;
 	}
@@ -90,18 +96,41 @@ function rerender(activeHabbitId) {
 
 /* work with days */
 function addDays(event) {
-	 // По имени input'а
-    const commentValue = event.target.comment.value;
-    console.log(commentValue);
-    
-    // Или через querySelector
-    const commentInput = event.target.querySelector('[name="comment"]');
-    console.log(commentInput.value);
+	const form = event.target;
 	event.preventDefault();
-	const data = new FormData(event.target);
-	console.log(data.get('comment'));
-	// console.log(data, typeof(data));
-	console.log(typeof(event.target))
+	const data = new FormData(form);
+	const comment = data.get('comment');
+	const commentField = form['comment'];
+	
+	// Удаляем предыдущие классы ошибки
+	commentField.classList.remove('error');
+	
+	if (!comment) {
+		// Добавляем класс ошибки
+		commentField.classList.add('error');
+		
+		// Удаляем класс ошибки через 2 секунды
+		setTimeout(() => {
+			commentField.classList.remove('error');
+		}, 1000);
+		
+		return;
+	}
+	
+	habbits = habbits.map(habbit => {
+		if (habbit.id === globalActiveHabbitId) {
+			return {
+				...habbit,
+				days: habbit.days.concat([{ comment }])
+			}
+		}
+		return habbit;
+	});
+	
+	form['comment'].value = '';
+	rerender(globalActiveHabbitId);
+	// rerenderContent(getActiveHabbit(globalActiveHabbitId));
+	saveData();
 }
 
 /* init */
