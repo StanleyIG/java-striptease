@@ -17,7 +17,8 @@ const page = {
 		nextDay: document.querySelector('.habbit__day')
 	},
 	popup: {
-		index: document.getElementById('add-habbit-popup')
+		index: document.getElementById('add-habbit-popup'),
+		iconField: document.querySelector('.popup__form input[name="icon"]')
 	}
 }
 
@@ -37,14 +38,6 @@ function saveData() {
 function togglePopup() {
     page.popup.index.classList.toggle('cover_hidden');
 }
-
-// function togglePopup() {
-// 	if (page.popup.index.classList.contains('cover_hidden')) {
-// 		page.popup.index.classList.remove('cover_hidden');
-// 	} else {
-// 		page.popup.index.classList.add('cover_hidden');
-// 	}
-// }
 
 /* render */
 function rerenderMenu(activeHabbit) {
@@ -112,25 +105,16 @@ function rerender(activeHabbitId) {
 /* work with days */
 function addDays(event) {
 	const form = event.target;
-	// const form2 = document.querySelector('form')
-	// console.log(form2)
-	// console.log(form2.comment)
-	// console.log(form2['comment'])
-	// const input = form2.querySelector('input')
-	// console.log(input)
 	event.preventDefault();
 	const data = new FormData(form);
 	const comment = data.get('comment');
 	const commentField = form['comment'];
 	
-	// Удаляем предыдущие классы ошибки
 	commentField.classList.remove('error');
 	
 	if (!comment) {
-		// Добавляем класс ошибки
 		commentField.classList.add('error');
 		
-		// Удаляем класс ошибки через 2 секунды
 		setTimeout(() => {
 			commentField.classList.remove('error');
 		}, 1000);
@@ -150,7 +134,6 @@ function addDays(event) {
 	
 	form['comment'].value = '';
 	rerender(globalActiveHabbitId);
-	// rerenderContent(getActiveHabbit(globalActiveHabbitId));
 	saveData();
 }
 
@@ -158,16 +141,20 @@ function deleteDay(index) {
 	habbits = habbits.map(habbit => {
 		if (habbit.id === globalActiveHabbitId) {
 			habbit.days.splice(index, 1);
-			// return {
-			// 	...habbit,
-			// 	days: habbit.days
-			// };
 			return habbit
 		}
 		return habbit;
 	});
 	rerender(globalActiveHabbitId);
 	saveData();
+}
+
+/* working with habbits */
+function setIcon(context, icon) {
+	page.popup.iconField.value = icon;
+	const activeIcon = document.querySelector('.icon.icon_active');
+	activeIcon.classList.remove('icon_active');
+	context.classList.add('icon_active');
 }
 
 /* init */
