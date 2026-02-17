@@ -97,6 +97,12 @@ function rerender(activeHabbitId) {
 /* work with days */
 function addDays(event) {
 	const form = event.target;
+	// const form2 = document.querySelector('form')
+	// console.log(form2)
+	// console.log(form2.comment)
+	// console.log(form2['comment'])
+	// const input = form2.querySelector('input')
+	// console.log(input)
 	event.preventDefault();
 	const data = new FormData(form);
 	const comment = data.get('comment');
