@@ -47,7 +47,7 @@ function resetForm(form, fields) {
 
 // Сохранение при изменении
 function changeHabbit(activeHabbitId) {
-  localStorage.setItem('activeHabbitId', activeHabbitId);
+  localStorage.setItem("activeHabbitId", activeHabbitId);
 }
 
 function validateAndGetFormData(form, fields) {
@@ -128,13 +128,13 @@ function rerenderContent(activeHabbit) {
 
 function rerender(activeHabbitId) {
   globalActiveHabbitId = activeHabbitId;
-  changeHabbit(globalActiveHabbitId)
+  changeHabbit(globalActiveHabbitId);
   const activeHabbit = habbits.find((habbit) => habbit.id === activeHabbitId);
   if (!activeHabbit) {
     return;
   }
-//   document.location.replace(document.location.pathname + "#" + activeHabbitId);
-document.location.replace(document.location.pathname + "#" + activeHabbitId);
+  //   document.location.replace(document.location.pathname + "#" + activeHabbitId);
+  document.location.replace(document.location.pathname + "#" + activeHabbitId);
   rerenderMenu(activeHabbit);
   rerenderHead(activeHabbit);
   rerenderContent(activeHabbit);
@@ -162,12 +162,10 @@ function addDays(event) {
 }
 
 function deleteDay(index) {
-  habbits = habbits.map((habbit) => {
+  habbits.forEach((habbit) => {
     if (habbit.id === globalActiveHabbitId) {
       habbit.days.splice(index, 1);
-      return habbit;
     }
-    return habbit;
   });
   rerender(globalActiveHabbitId);
   saveData();
@@ -218,9 +216,9 @@ function addHabbit(event) {
 
 (() => {
   loadData();
-  const savedHabbitId = localStorage.getItem('activeHabbitId');
-  const savedHabbit = habbits.find(h => h.id == savedHabbitId);
-  
+  const savedHabbitId = localStorage.getItem("activeHabbitId");
+  const savedHabbit = habbits.find((h) => h.id == savedHabbitId);
+
   if (savedHabbit) {
     rerender(savedHabbit.id);
   } else {
